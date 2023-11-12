@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-class TorchNN(nn.Module):
+class TorchNN_train(nn.Module):
 
   # Initializes the weights and biases
   def __init__(self) -> None:
@@ -22,7 +22,7 @@ class TorchNN(nn.Module):
     self.b10 = nn.Parameter(torch.tensor(0.0), requires_grad=False)
     self.w11 = nn.Parameter(torch.tensor(2.7), requires_grad=False)
 
-    self.final_bias = nn.Parameter(torch.tensor(-16.0), requires_grad=False)
+    self.final_bias = nn.Parameter(torch.tensor(0.0), requires_grad=True)
   
   # Does a forward pass and calculates the output value for the input
   def forward(self, input):
@@ -32,28 +32,53 @@ class TorchNN(nn.Module):
     bottom_input = input * self.w10 + self.b10
     bottom_relu_output = F.relu(bottom_input)
     scaled_bottom_relu_output = bottom_relu_output * self.w11
-
     input_to_final_relu = scaled_top_relu_output + scaled_bottom_relu_output + self.final_bias
 
     output = F.relu(input_to_final_relu)
 
     return output
 
+  def train(self, inputs, labels, total_loss):
+    optimizer = SGD(model.parameters(), lr=.1)
+    print("Starting bias", model.final_bias)
+    for epoch in range(100):
+      for iteration in range(len(inputs)):
+        input_i = inputs[iteration]
+        label_i = labels[iteration]
+        output_i = model(input_i)
+        loss = (output_i - label_i)**2
+        loss.backward()
+        total_loss += float(loss)
+      print(total_loss)
+      if(total_loss < 0.0001):
+        print("Num of steps" , str(epoch))
+        break
+      optimizer.step()
+      optimizer.zero_grad()
+    return total_loss
+
+
+inputs = torch.tensor([0.0, .5, 1.0])
+labels = torch.tensor([0,1,0])
+model = TorchNN_train()
+print(model.parameters())
+print("Bias before optimization: " , str(model.final_bias.data))
+
+arbitarary_total_loss = 0.0
+
+model.train(inputs, labels, arbitarary_total_loss)
+print("Total loss after training: ", model.final_bias)
 
 input = torch.linspace(start=0, end=1, steps=11)
 print(input)
-model = TorchNN()
 output = model(input)
 print(output)
+# sns.set(style='whitegrid')
+# sns.lineplot(x=input,
+#              y=output.detach(),
+#              color='green',
+#              linewidth=2.5)
 
-sns.set(style='whitegrid')
-sns.lineplot(x=input,
-             y=output,
-             color='green',
-             linewidth=2.5)
-
-plt.ylabel = 'Effectiveness'
-plt.xlabel = 'dose'
 
 
     
