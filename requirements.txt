@@ -10,7 +10,6 @@ pinecone-client
 
 # Knowledge Graphs and Databases
 neo4j
-sqlite3  # Built-in, no need to install
 
 # Tools and Integrations
 langchain
