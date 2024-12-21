@@ -1,0 +1,47 @@
+# Language Models and NLP
+openai
+transformers
+spacy
+
+# Vector Search and Retrieval
+faiss-cpu
+chromadb
+pinecone-client
+
+# Knowledge Graphs and Databases
+neo4j
+sqlite3  # Built-in, no need to install
+
+# Tools and Integrations
+langchain
+farm-haystack
+
+# Mathematical Computations
+numpy
+sympy
+
+# Web Scraping
+beautifulsoup4
+selenium
+
+# Data Analysis
+pandas
+
+# Machine Learning and Deep Learning
+tensorflow
+torch
+scikit-learn
+
+# APIs and Communication
+fastapi
+flask
+twilio
+
+# Utilities
+loguru
+python-dotenv
+apscheduler
+
+# Deployment
+boto3
+docker  # Optional; usually installed via system package manager
