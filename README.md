@@ -1,6 +1,6 @@
 # Project Setup
 
-This project sets up the necessary environment and installs all required libraries to build an AI agent.
+This project sets up the necessary environment and installs all required libraries to build and test out various machine learning and GenAI examples.
 
 ---
 
