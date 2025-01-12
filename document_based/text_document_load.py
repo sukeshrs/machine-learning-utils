@@ -2,6 +2,8 @@ from langchain.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+from langchain.chat_models import ChatOpenAI
 import os
 
 loader = TextLoader("../files/soccer_history.txt")
@@ -32,7 +34,17 @@ def embed_chunks(documents):
 def content_search(vector_store, query):
     retriever = vector_store.as_retriever()
     retrieved_docs = retriever.get_relevant_documents(query)
-    return retrieved_docs
+    return retriever,retrieved_docs
+
+
+def retrieve_with_llm(retriever, query):
+    # Initialize LLM
+    llm = ChatOpenAI(model="gpt-4", temperature=0)
+    # Create a Retrieval QA Chain
+    qa_chain = RetrievalQA(llm=llm, retriever=retriever)
+    # Ask a question
+    response = qa_chain.run(query)
+    return response
 
 
 # Load the document into a list of LangChain Documents
@@ -43,8 +55,12 @@ print(documents)
 query = "What is the main idea of the document?"
 chunked_docs = chunk_docs(documents)
 embedded = embed_chunks(chunked_docs)
-docs = content_search(embedded, query)
+retriever, docs = content_search(embedded, query)
 for doc in docs:
     print(doc.page_content)
+
+# Use LLM to answer the question
+result = retrieve_with_llm(retriever, query)
+print(result)
 
 
