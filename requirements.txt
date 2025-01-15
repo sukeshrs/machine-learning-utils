@@ -13,6 +13,7 @@ neo4j
 
 # Tools and Integrations
 langchain
+langchain_community
 farm-haystack
 
 # Mathematical Computations
@@ -48,3 +49,5 @@ docker  # Optional; usually installed via system package manager
 yfinance
 
 sentence-transformers
+
+tf-keras
