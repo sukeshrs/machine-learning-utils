@@ -1,7 +1,9 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+from langchain_community.chat_models import ChatOpenAI
 
 # Load the PDF file
 pdf_path = "../files/Metiorids_Impacting_moon.pdf"
@@ -22,15 +24,25 @@ def chunk_docs(documents):
     chunked_docs = text_splitter.split_documents(documents)
     return chunked_docs
 
+def create_vector_store(chunked_docs):
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+    vector_store = FAISS.from_documents(chunked_docs, embeddings)
+    return vector_store
+
+def get_qa_chain():
+    # Initialize the language model
+    llm = ChatOpenAI(model="gpt-4", temperature=0)
+    # Create a RetrievalQA chain
+    qa_chain = RetrievalQA(llm=llm, retriever=retriever)
+    return qa_chain
+
+
 
 chunked_docs = chunk_docs(documents)
-
 print(f"Number of chunks: {len(chunked_docs)}")
-
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2")
-vector_store = FAISS.from_documents(documents, embeddings)
-
+vector_store = create_vector_store(chunked_docs)
 
 # Create a retriever
 retriever = vector_store.as_retriever()
@@ -44,3 +56,10 @@ for idx, doc in enumerate(retrieved_docs):
     print(f"Chunk {idx + 1}:")
     print(doc.page_content)
     print("-" * 80)
+
+#Integrate the retrieved chunks with a language model to generate a complete answer.
+
+qa_chain = get_qa_chain()
+
+response = qa_chain.run(query)
+print("Response from LLM:", response)
