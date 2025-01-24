@@ -1,4 +1,5 @@
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
@@ -12,6 +13,20 @@ def chunk_docs(documents, size=1000, overlap=200):
     chunked_docs = text_splitter.split_documents(documents)
     return chunked_docs
 
+'''
+Chunks the document using RecursiveCharacterTextSplitter.
+It tries to split at smaller sections like paragraphs, sentences, or words
+'''
+def chunk_docs_rec_text_splitter(documents, size=1000, overlap=200):
+
+    # Initialize RecursiveCharacterTextSplitter
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        separators=["\n\n", "\n", " ", ""]
+    )
+    chunked_docs = text_splitter.split_documents(documents)
+    return chunked_docs
 
 '''
 Embeds the documents using sentance transformers. Creates a vector store using FAISS library
