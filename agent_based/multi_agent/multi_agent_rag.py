@@ -1,11 +1,11 @@
 from langchain.memory import ConversationBufferMemory
 from langchain.agents import initialize_agent, AgentType, AgentExecutor
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.tools import Tool
 from langchain.schema import SystemMessage
-from langchain.vectorstores import FAISS
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.document_loaders import TextLoader
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_experimental.plan_and_execute import load_agent_executor, load_chat_planner
 import requests
