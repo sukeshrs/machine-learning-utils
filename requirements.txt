@@ -53,3 +53,8 @@ sentence-transformers
 tf-keras
 
 wikipedia
+
+autogen
+crewai
+arxiv
+pypdf
